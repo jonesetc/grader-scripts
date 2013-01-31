@@ -1,5 +1,4 @@
 import os
-import sys
 import shutil
 
 def getdirs():
@@ -25,14 +24,14 @@ def organize(subdir):
         os.chdir(student)
 
         # Make the new directory in the student folder
-        os.mkdir(sys.argv[1])
+        os.mkdir(subdir)
 
         # List all of the files in the student directory
         files = getfiles()
 
         # Move all of the files into the new directory
         for file in files:
-            shutil.move(file, sys.argv[1])
+            shutil.move(file, subdir)
 
         # Get back into the beginning directory
         os.chdir('..')
