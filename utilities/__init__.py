@@ -1,5 +1,8 @@
 import os
 import shutil
+import re
+
+import sh
 
 def getdirs():
     files = os.listdir('.')
@@ -35,3 +38,26 @@ def organize(subdir):
 
         # Get back into the beginning directory
         os.chdir('..')
+
+def compile(lab):
+    # sh doesn't like the ++ in g++, so this gets around that
+    gpp = sh.Command('g++')
+    gpp(lab + '.cpp', _err='compile.log')
+    
+def test():
+    if not os.path.isfile('a.out'):
+        sh.echo('No executable found', _out='results.txt')
+        return
+    
+    result = sh.Command('./a.out')
+    result(_out='results.txt')
+
+def fix_names(lab):
+    files = getfiles()
+
+    for file in files:
+        os.rename(file, file.lower())
+        file = file.lower()
+        if re.match(lab[:3]+'.*'+lab[3:]+'.*\.cpp', file):
+            os.rename(file, lab+'.cpp')
+
